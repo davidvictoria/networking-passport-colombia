@@ -3,7 +3,7 @@
 version = 0.1
 
 [default.global.parameters]
-stack_name = "networking-passport-colombia"
+stack_name = "backend"
 
 [default.build.parameters]
 cached = true
@@ -16,11 +16,6 @@ lint = true
 capabilities = "CAPABILITY_IAM"
 confirm_changeset = true
 resolve_s3 = true
-s3_prefix = "networking-passport-colombia"
-region = "us-east-1"
-disable_rollback = true
-parameter_overrides = "ShortIdGSIName=\"ShortIdGSI\" DateLSIName=\"DateLSI\""
-image_repositories = []
 
 [default.package.parameters]
 resolve_s3 = true
