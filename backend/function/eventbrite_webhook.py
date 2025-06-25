@@ -142,15 +142,25 @@ def lambda_handler(event, context):
 def extract_and_validate_data(attendee_data):
 
     profile = attendee_data.get("profile", {})
+    answers = attendee_data.get("answers", [])
+    
+    # Helper function to find answer by question text
+    def find_answer_by_question(question_text):
+        for answer in answers:
+            if answer.get("question") == question_text:
+                return answer.get("answer", "")
+        return ""
+    
+    # Extract role from "Profesión/Carrera" and company from "Empresa"
+    role = find_answer_by_question("Profesión/Carrera")
+    company = find_answer_by_question("Empresa")
 
     return {
         "first_name": profile.get("first_name", ""),
         "last_name": profile.get("last_name", ""),
-        "cell_phone": profile.get("cell_phone", ""),
         "email": profile.get("email", ""),
-        "job_title": profile.get("job_title", ""),
-        "company": profile.get("company", ""),
-        "gender": profile.get("gender", ""),
+        "job_title": role,  # Now comes from answers
+        "company": company,  # Now comes from answers
         "barcode": attendee_data["barcodes"][0]["barcode"],
         "initialized": False,
     }
@@ -175,10 +185,8 @@ def save_to_dynamodb(data):
             "company": data.get("company"),
             "contact_information": {
                 "email": data.get("email"),
-                "phone": data.get("cell_phone"),
             },
-            "gender": data.get("gender"),
-            "role": data.get("job_title"),
+            "job_title": data.get("job_title"),
         }
 
         logger.info(f"Item to save: {item}")

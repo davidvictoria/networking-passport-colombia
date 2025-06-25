@@ -33,9 +33,9 @@ Globals:
   Api:
     TracingEnabled: true
     Cors:
-      AllowMethods: "'GET,POST,OPTIONS'"
-      AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-      AllowOrigin: "'*'"
+      AllowMethods: "GET,POST,OPTIONS"
+      AllowHeaders: "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token"
+      AllowOrigin: "*"
 Resources:
   DynamoDBTable:
     Type: 'AWS::DynamoDB::Table'
@@ -261,6 +261,22 @@ Resources:
             SecretArn: !Ref EventbriteSecret
         - DynamoDBCrudPolicy:
             TableName: !Ref DynamoDBTable  
+
+  # Auto-deploy API Gateway
+  ApiGatewayDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn: 
+      - UpdateFunction
+      - GetInformationFunction
+      - UnlockActivationFunction
+      - CheckExistenceFunction
+      - GetPassportStatusFunction
+      - StampPassportFunction
+      - CreateSponsorJWTFunction
+      - EventbriteWebhookFunction
+    Properties:
+      RestApiId: !Ref ServerlessRestApi
+      StageName: Prod
 
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
