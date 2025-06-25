@@ -3,11 +3,16 @@ frontend:
   phases:
     preBuild:
       commands:
+        - echo "Current directory: $(pwd)"
+        - ls -la
         - cd frontend
+        - echo "Frontend directory: $(pwd)"
         - npm install
     build:
       commands:
+        - echo "Build phase - Current directory: $(pwd)"
         - cd frontend
+        - echo "Build phase - Frontend directory: $(pwd)"
         - npm run build
   artifacts:
     baseDirectory: frontend/dist
