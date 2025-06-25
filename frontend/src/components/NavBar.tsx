@@ -33,7 +33,7 @@ const Navbar: React.FC = () => {
                     <Image
                         src={"https://www.awscommunitydaycolombia.com/assets/images/png/logo.png"}
                         alt={"logo"}
-                        width={200}
+                        height={45}
                     />
                     {isLoggedIn && (
                         <Button colorScheme="red" onClick={handleLogout}>
