@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Box,
     Button,
@@ -17,7 +17,7 @@ import {
     useToast,
     VStack
 } from '@chakra-ui/react';
-import {DownloadIcon, GlobeIcon, LinkedinIcon, Mail} from 'lucide-react';
+import {DownloadIcon, GlobeIcon, LinkedinIcon, Mail, X as CloseIcon} from 'lucide-react';
 import axios from 'axios';
 import ProfileItem from "./ProfileItem.tsx";
 import BASE_API_URL from "../base-api.ts";
@@ -33,7 +33,11 @@ const ProfilePage: React.FC = () => {
     const [profile, setProfile] = useState<Profile | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [pin, setPin] = useState('');
-    const [isPinModalOpen, setIsPinModalOpen] = useState(true);
+    const [isPinModalOpen, setIsPinModalOpen] = useState(false);
+    const [showInactiveModal, setShowInactiveModal] = useState(false);
+    const [isInitialized, setIsInitialized] = useState<boolean | null>(null);
+    const [activationMethod, setActivationMethod] = useState<'both' | 'email'>('both');
+    const [activationValue, setActivationValue] = useState('');
 
     const toast = useToast();
     const bgColor = useColorModeValue('gray.50', 'gray.800');
@@ -50,9 +54,7 @@ const ProfilePage: React.FC = () => {
         const visitorId = Cookies.get('visitorId');
         setIsLoading(true);
         try {
-            const validateResponse = await axios.get<ValidationResponse>(`${BASE_API_URL}/attendee/validate?short_id=${shortID}`);
-            if (!validateResponse.data.initialized) {
-                navigate(`/activate?short_id=${shortID}&method=${validateResponse.data.method}`);
+            if (isInitialized === false) {
                 setIsLoading(false);
                 return;
             }
@@ -100,6 +102,24 @@ const ProfilePage: React.FC = () => {
             URL.revokeObjectURL(url);
         }
     };
+
+    useEffect(() => {
+        const fetchValidation = async () => {
+            try {
+                const response = await axios.get<ValidationResponse>(`${BASE_API_URL}/attendee/validate?short_id=${shortID}`);
+                setIsInitialized(response.data.initialized);
+                setActivationMethod(response.data.method);
+                if (!response.data.initialized) {
+                    setShowInactiveModal(true);
+                } else {
+                    setIsPinModalOpen(true);
+                }
+            } catch {
+                setIsInitialized(null);
+            }
+        };
+        if (shortID) fetchValidation();
+    }, [shortID, navigate]);
 
     return (
         <>
@@ -161,16 +181,45 @@ const ProfilePage: React.FC = () => {
                                 {profile && shortID && <Passport shortId={shortID} />}
                             </>
                         ) : (
-                            <Text textAlign="center">Ingresa el PIN para ver este perfil.</Text>
+                            <>
+                                <Text textAlign="center" mb={4}>
+                                    Este perfil aún no ha sido activado, pero puedes ver el estado de su pasaporte.
+                                </Text>
+                                {shortID && <Passport shortId={shortID} />}
+                            </>
                         )}
                     </VStack>
                 </Container>
 
-                <Modal isOpen={isPinModalOpen} onClose={() => {
-                }}>
+                {/* Modal para perfil no activado */}
+                <Modal isOpen={showInactiveModal && isInitialized === false} onClose={() => setShowInactiveModal(false)}>
                     <ModalOverlay/>
                     <ModalContent>
-                        <ModalHeader>Ingresa el PIN</ModalHeader>
+                        <ModalHeader display="flex" alignItems="center" justifyContent="space-between">
+                            Perfil no activado
+                            <Button variant="ghost" size="sm" onClick={() => setShowInactiveModal(false)} aria-label="Cerrar" p={0} minW={6}>
+                                <CloseIcon size={20}/>
+                            </Button>
+                        </ModalHeader>
+                        <ModalBody>
+                            <Text mb={4}>Para poder compartir tus datos y acceder a todas las funcionalidades, primero debes activar tu perfil.</Text>
+                            <Button colorScheme="blue" w="100%" onClick={() => navigate(`/activate?short_id=${shortID}&method=${activationMethod}`)}>
+                                Activar mi perfil
+                            </Button>
+                        </ModalBody>
+                    </ModalContent>
+                </Modal>
+
+                {/* Modal de PIN */}
+                <Modal isOpen={isPinModalOpen && isInitialized === true} onClose={() => setIsPinModalOpen(false)}>
+                    <ModalOverlay/>
+                    <ModalContent>
+                        <ModalHeader display="flex" alignItems="center" justifyContent="space-between">
+                            Ingresa el PIN
+                            <Button variant="ghost" size="sm" onClick={() => setIsPinModalOpen(false)} aria-label="Cerrar" p={0} minW={6}>
+                                <CloseIcon size={20}/>
+                            </Button>
+                        </ModalHeader>
                         <ModalBody>
                             <Input
                                 type="number"

@@ -29,14 +29,15 @@ const Navbar: React.FC = () => {
     return (
         <Box position="sticky" top="0" zIndex="sticky">
             <Box bg="gray.700" px={4}>
-                <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+                <Flex h={16} alignItems={'center'} justifyContent={'center'} position="relative">
                     <Image
                         src={"https://www.awscommunitydaycolombia.com/assets/images/png/logo.png"}
                         alt={"logo"}
                         height={45}
+                        mx="auto"
                     />
                     {isLoggedIn && (
-                        <Button colorScheme="red" onClick={handleLogout}>
+                        <Button colorScheme="red" onClick={handleLogout} position="absolute" right={0} top={"50%"} transform="translateY(-50%)">
                             Log Out
                         </Button>
                     )}
