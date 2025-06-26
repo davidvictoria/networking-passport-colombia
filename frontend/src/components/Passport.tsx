@@ -62,8 +62,11 @@ const Passport: React.FC<PassportProps> = ({ shortId }) => {
 
   return (
     <Box>
-      <Text fontSize="lg" fontWeight="bold" mb={4}>
+      <Text fontSize="lg" fontWeight="bold" mb={1}>
         Pasaporte Digital
+      </Text>
+      <Text fontSize="sm" fontStyle="italic" mb={3} mt={0}>
+        ¡Llevas {passportData?.stamped_sponsors.length || 0} de 8 sellos!
       </Text>
       <Grid templateColumns="repeat(3, 1fr)" gap={4}>
         {allSponsors.map((sponsorId) => (
