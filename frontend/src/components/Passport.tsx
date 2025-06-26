@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Box, Grid, Image, Text, VStack } from '@chakra-ui/react';
+import { Box, Grid, Text } from '@chakra-ui/react';
 import axios from 'axios';
 import BASE_API_URL from '../base-api.ts';
 import Stamp from './Stamp.tsx';
