@@ -26,6 +26,7 @@ import Cookies from 'js-cookie';
 import {useNavigate} from "react-router-dom";
 import {ValidationResponse} from "../types/validation.ts";
 import {Profile} from "../types/profile.ts";
+import Passport from "./Passport.tsx";
 
 
 const ProfilePage: React.FC = () => {
@@ -168,6 +169,8 @@ const ProfilePage: React.FC = () => {
                                 >
                                     Descargar tarjeta de contacto
                                 </Button>
+                                <Divider/>
+                                <Passport shortId={shortID} />
                             </>
                         ) : (
                             <Text textAlign="center">Ingresa el PIN para ver este perfil.</Text>

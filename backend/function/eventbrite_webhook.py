@@ -186,7 +186,7 @@ def save_to_dynamodb(data):
             "contact_information": {
                 "email": data.get("email"),
             },
-            "job_title": data.get("job_title"),
+            "role": data.get("job_title"),
         }
 
         logger.info(f"Item to save: {item}")
