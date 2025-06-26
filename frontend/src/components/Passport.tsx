@@ -21,7 +21,7 @@ const sponsorNames: Record<string, string> = {
   '6': 'Nequi',
   '7': 'Endava',
   '8': 'I CLOUD SEVEN SAS',
-  '9': 'AWS Woman Colombia',
+  '9': 'AWS Women Colombia',
 };
 
 const Passport: React.FC<PassportProps> = ({ shortId }) => {
