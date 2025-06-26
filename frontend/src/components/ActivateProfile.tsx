@@ -292,7 +292,26 @@ const ActivateProfile = () => {
                             </FormControl>
                             <FormControl isRequired>
                                 <FormLabel>PIN</FormLabel>
-                                <Input name="pin" value={userProfile.pin} onChange={handleInputChange} type={"number"}/>
+                                <Input 
+                                    name="pin" 
+                                    value={userProfile.pin}
+                                    onChange={(e) => {
+                                        // Solo permitir hasta 4 dígitos numéricos
+                                        const val = e.target.value.replace(/\D/g, '').slice(0, 4);
+                                        handleInputChange({
+                                            ...e,
+                                            target: {
+                                                ...e.target,
+                                                value: val,
+                                                name: 'pin',
+                                            }
+                                        } as React.ChangeEvent<HTMLInputElement>);
+                                    }}
+                                    type="text"
+                                    inputMode="numeric"
+                                    pattern="[0-9]{4}"
+                                    maxLength={4}
+                                />
                                 <FormHelperText>
                                     La clave de 4 dígitos que permitirá a otros <i>builders</i> ver tu perfil.
                                 </FormHelperText>

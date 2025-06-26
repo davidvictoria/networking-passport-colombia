@@ -50,7 +50,7 @@ def lambda_handler(event, context):
         for item in response_sponsors.get("Items", []):
             sk = item["SK"]["S"]
             if sk.startswith("SPONSOR#"):
-                # Extraer el sponsor_id del SK (formato: SPONSOR#ID#timestamp)
+                # Extraer el sponsor_id del SK (formato: SPONSOR#ID)
                 sponsor_id = sk.split("#")[1]
                 if sponsor_id not in stamped_sponsors:
                     stamped_sponsors.append(sponsor_id)

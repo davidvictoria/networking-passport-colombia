@@ -39,35 +39,23 @@ const ProfilePage: React.FC = () => {
     const bgColor = useColorModeValue('gray.50', 'gray.800');
     const cardBgColor = useColorModeValue('white', 'gray.700');
 
-    const [shortID, setShortID] = useState('');
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialShortId = urlParams.get('short_id') || '';
+    const [shortID] = useState(initialShortId);
 
     const navigate = useNavigate();
 
-
-    useEffect(() => {
-        const fetchActivationStatus = async (): Promise<ValidationResponse> => {
-            const response = await axios.get<ValidationResponse>(`${BASE_API_URL}/attendee/validate?short_id=${shortID}`);
-            return response.data;
-        }
-        const urlParams = new URLSearchParams(window.location.search);
-        const short_id = urlParams.get('short_id');
-        console.log(short_id);
-        if (short_id) {
-            setShortID(short_id);
-            console.log("fetching activation status with short_id: ", short_id);
-            fetchActivationStatus().then((response) => {
-                if (!response.initialized) {
-                    navigate(`/activate?short_id=${short_id}&method=${response.method}`);
-                }
-            });
-        }
-
-    }, [navigate, shortID]);
 
     const fetchProfile = async () => {
         const visitorId = Cookies.get('visitorId');
         setIsLoading(true);
         try {
+            const validateResponse = await axios.get<ValidationResponse>(`${BASE_API_URL}/attendee/validate?short_id=${shortID}`);
+            if (!validateResponse.data.initialized) {
+                navigate(`/activate?short_id=${shortID}&method=${validateResponse.data.method}`);
+                setIsLoading(false);
+                return;
+            }
             const response = await axios.get<Profile>(`${BASE_API_URL}/attendee?short_id=${shortID}&pin=${pin}&device=${visitorId}`);
             setProfile(response.data);
             setIsPinModalOpen(false);
@@ -170,7 +158,7 @@ const ProfilePage: React.FC = () => {
                                     Descargar tarjeta de contacto
                                 </Button>
                                 <Divider/>
-                                <Passport shortId={shortID} />
+                                {profile && shortID && <Passport shortId={shortID} />}
                             </>
                         ) : (
                             <Text textAlign="center">Ingresa el PIN para ver este perfil.</Text>

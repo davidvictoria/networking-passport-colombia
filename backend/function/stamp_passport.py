@@ -55,33 +55,8 @@ def verify_jwt(token, secret_key):
         return None
 
 def can_register(user_id, sponsor_id):
-    now = datetime.now(timezone.utc)
-    ten_minutes_ago = now - timedelta(minutes=10)
-
-    # Query the latest session for the user with the sponsor
-    response = dynamodb.query(
-        TableName=table_name,
-        KeyConditionExpression="PK = :user_pk AND begins_with(SK, :sponsor_sk)",
-        ExpressionAttributeValues={
-            ":user_pk": {"S": f"USER#{user_id}"},
-            ":sponsor_sk": {"S": f"SPONSOR#{sponsor_id}"},
-        },
-        ScanIndexForward=False,  # Sort in descending order to get the latest session first
-        Limit=1
-    )
-
-    # Check if there is a recent session
-    items = response.get('Items', [])
-    if items:
-        last_session = items[0]
-        last_timestamp = datetime.fromisoformat(last_session['created_at']['S'])
-
-        # Ensure the last session was more than 10 minutes ago
-        if last_timestamp > ten_minutes_ago:
-            return False
-
-    # Otherwise, allow the registration
-    return True
+    # Eliminar esta función ya que no necesitamos la regla de 10 minutos
+    pass
 
 
 # Función para guardar o actualizar el sello y los comentarios
@@ -122,21 +97,91 @@ def lambda_handler(event, context):
 
         now = datetime.now(timezone.utc).isoformat()
 
-        if not can_register(user_id, sponsor_id):
-            return generate_http_response(403, {"error": "User already registered"})
-
-        dynamodb.put_item(
+        # Buscar el registro existente para este participante y sponsor
+        response_sessions = dynamodb.query(
             TableName=table_name,
-            Item={
-                "PK": {"S": f"USER#{user_id}"},
-                "SK": {"S": f"SPONSOR#{sponsor_id}#{now}"},
-                "created_at": {"S": now},
+            KeyConditionExpression="PK = :user_pk AND begins_with(SK, :sponsor_sk)",
+            ExpressionAttributeValues={
+                ":user_pk": {"S": f"USER#{user_id}"},
+                ":sponsor_sk": {"S": f"SPONSOR#{sponsor_id}"},
             },
         )
+        
+        items = response_sessions.get('Items', [])
+        
+        if items:
+            # Ya existe un registro
+            existing_item = items[0]
+            current_visit_count = int(existing_item.get('visit_count', {}).get('N', '0'))
+            previous_notes = existing_item.get('notes', {}).get('S', '')
+            last_visit = existing_item.get('last_visit', {}).get('S', existing_item.get('created_at', {}).get('S', now))
 
-        return generate_http_response(
-            200, {"message": "Stamp and notes saved successfully"}
-        )
+            if notes and not body.get('register_visit', True):
+                # Solo actualizar comentarios, NO sumar visita ni actualizar last_visit
+                dynamodb.update_item(
+                    TableName=table_name,
+                    Key={
+                        "PK": {"S": f"USER#{user_id}"},
+                        "SK": {"S": f"SPONSOR#{sponsor_id}"}
+                    },
+                    UpdateExpression="SET notes = :notes",
+                    ExpressionAttributeValues={
+                        ":notes": {"S": notes}
+                    }
+                )
+                return generate_http_response(200, {
+                    "message": "Comments updated",
+                    "visit_count": current_visit_count,
+                    "last_visit": last_visit,
+                    "previous_notes": notes
+                })
+            else:
+                # Registrar visita: sumar visita y actualizar last_visit
+                new_visit_count = current_visit_count + 1
+                update_expression = "SET visit_count = :visit_count, last_visit = :last_visit"
+                expression_values = {
+                    ":visit_count": {"N": str(new_visit_count)},
+                    ":last_visit": {"S": now}
+                }
+                if notes:
+                    update_expression += ", notes = :notes"
+                    expression_values[":notes"] = {"S": notes}
+                dynamodb.update_item(
+                    TableName=table_name,
+                    Key={
+                        "PK": {"S": f"USER#{user_id}"},
+                        "SK": {"S": f"SPONSOR#{sponsor_id}"}
+                    },
+                    UpdateExpression=update_expression,
+                    ExpressionAttributeValues=expression_values
+                )
+                return generate_http_response(200, {
+                    "message": "Visit updated",
+                    "visit_count": new_visit_count,
+                    "last_visit": now,
+                    "previous_notes": notes if notes else previous_notes
+                })
+        else:
+            # Primera visita, crear nuevo registro
+            item_to_save = {
+                "PK": {"S": f"USER#{user_id}"},
+                "SK": {"S": f"SPONSOR#{sponsor_id}"},
+                "created_at": {"S": now},
+                "last_visit": {"S": now},
+                "visit_count": {"N": "1"}
+            }
+            
+            # Agregar comentarios si existen
+            if notes:
+                item_to_save["notes"] = {"S": notes}
+                
+            dynamodb.put_item(TableName=table_name, Item=item_to_save)
+            
+            return generate_http_response(200, {
+                "message": "First visit registered",
+                "visit_count": 1,
+                "last_visit": now
+            })
 
     except ClientError as e:
         print(f"Error accessing DynamoDB: {e}")
