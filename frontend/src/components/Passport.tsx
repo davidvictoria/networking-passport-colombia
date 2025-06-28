@@ -31,7 +31,7 @@ const Passport: React.FC<PassportProps> = ({ shortId }) => {
   const fetchedRef = useRef(false);
 
   // Lista de todos los sponsors disponibles
-  const allSponsors = ['2', '3', '4', '5', '6', '7', '8', '9', '10'];
+  const allSponsors = ['10', '2', '3', '4', '5', '6', '7', '8', '9'];
 
   useEffect(() => {
     if (fetchedRef.current) return;
