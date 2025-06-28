@@ -21,7 +21,8 @@ const sponsorNames: Record<string, string> = {
   '6': 'Nequi',
   '7': 'Endava',
   '8': 'I CLOUD SEVEN SAS',
-  '9': 'AWS Women Colombia',
+  '9': 'AWS Community Day Colombia',
+  '10': 'Universidad Nacional de Colombia',
 };
 
 const Passport: React.FC<PassportProps> = ({ shortId }) => {
@@ -30,7 +31,7 @@ const Passport: React.FC<PassportProps> = ({ shortId }) => {
   const fetchedRef = useRef(false);
 
   // Lista de todos los sponsors disponibles
-  const allSponsors = ['2', '3', '4', '5', '6', '7', '8', '9'];
+  const allSponsors = ['2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
   useEffect(() => {
     if (fetchedRef.current) return;
@@ -66,7 +67,7 @@ const Passport: React.FC<PassportProps> = ({ shortId }) => {
         Pasaporte Digital
       </Text>
       <Text fontSize="sm" fontStyle="italic" mb={3} mt={0}>
-        ¡Llevas {passportData?.stamped_sponsors.length || 0} de 8 sellos!
+        ¡Llevas {passportData?.stamped_sponsors.length || 0} de 9 sellos!
       </Text>
       <Grid templateColumns="repeat(3, 1fr)" gap={4}>
         {allSponsors.map((sponsorId) => (

@@ -53,7 +53,19 @@ SPONSORS = [
     },
     {
         "sponsor_id": "8",
-        "sponsor_name": "AWS Woman Colombia",
+        "sponsor_name": "EPAM Systems",
+        "key": str(uuid.uuid4()),
+        "required": True
+    },
+    {
+        "sponsor_id": "9",
+        "sponsor_name": "AWS Community Day Colombia",
+        "key": str(uuid.uuid4()),
+        "required": True
+    },
+    {
+        "sponsor_id": "10",
+        "sponsor_name": "Universidad Nacional de Colombia",
         "key": str(uuid.uuid4()),
         "required": True
     }
