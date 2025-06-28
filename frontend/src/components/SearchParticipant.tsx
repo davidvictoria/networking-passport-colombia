@@ -62,7 +62,7 @@ const SearchParticipant: React.FC = () => {
         } catch {
             toast({
                 title: 'Error',
-                description: 'Failed to fetch participant data',
+                description: 'Error al obtener datos del participante',
                 status: 'error',
                 duration: 3000,
                 isClosable: true,

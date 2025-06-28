@@ -79,8 +79,8 @@ const ProfilePage: React.FC = () => {
             fetchProfile();
         } else {
             toast({
-                title: 'Invalid PIN',
-                description: 'Please enter a 4-digit PIN.',
+                title: 'PIN Inválido',
+                description: 'Por favor ingresa un PIN de 4 dígitos.',
                 status: 'error',
                 duration: 3000,
                 isClosable: true,
@@ -144,7 +144,7 @@ const ProfilePage: React.FC = () => {
                                 <Divider/>
                                 <VStack align="stretch" spacing={4}>
                                     {profile.email && (
-                                        <ProfileItem icon={Mail} label="Email" value={profile.email}
+                                        <ProfileItem icon={Mail} label="Correo electrónico" value={profile.email}
                                                      isLoading={isLoading}/>
                                     )}
                                     {profile.phone && (

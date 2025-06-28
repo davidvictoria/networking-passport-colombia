@@ -69,7 +69,7 @@ const Passport: React.FC<PassportProps> = ({ shortId }) => {
       <Text fontSize="sm" fontStyle="italic" mb={3} mt={0}>
         ¡Llevas {passportData?.stamped_sponsors.length || 0} de 9 sellos!
       </Text>
-      <Grid templateColumns="repeat(3, 1fr)" gap={4}>
+      <Grid templateColumns="repeat(2, 1fr)" gap={4}>
         {allSponsors.map((sponsorId) => (
           <Box key={sponsorId} textAlign="center">
             <Stamp
@@ -77,7 +77,7 @@ const Passport: React.FC<PassportProps> = ({ shortId }) => {
               stampedIDs={passportData?.stamped_sponsors || []}
             />
             <Text fontSize="sm" mt={2}>
-              {sponsorNames[sponsorId] || `Sponsor ${sponsorId}`}
+              {sponsorNames[sponsorId] || `Patrocinador ${sponsorId}`}
             </Text>
           </Box>
         ))}

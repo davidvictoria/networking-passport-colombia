@@ -356,7 +356,7 @@ const ActivateProfile = () => {
                                     ))}
                                 </VStack>
                                 <Button type="submit" colorScheme="blue">
-                                    Save Profile
+                                    Guardar Perfil
                                 </Button>
                             </VStack>
                         </form>

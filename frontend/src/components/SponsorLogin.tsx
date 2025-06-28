@@ -34,8 +34,8 @@ const SponsorLogin: React.FC = () => {
             localStorage.setItem('sponsorToken', response.data.token);
 
             toast({
-                title: 'Login successful',
-                description: 'You have successfully logged in as a sponsor.',
+                title: 'Inicio de sesión exitoso',
+                description: 'Has iniciado sesión exitosamente como patrocinador.',
                 status: 'success',
                 duration: 3000,
                 isClosable: true,
@@ -43,8 +43,8 @@ const SponsorLogin: React.FC = () => {
             navigate('/search-participant');
         } catch {
             toast({
-                title: 'Login failed',
-                description: 'Invalid sponsor ID or key.',
+                title: 'Error de inicio de sesión',
+                description: 'ID de patrocinador o clave inválidos.',
                 status: 'error',
                 duration: 3000,
                 isClosable: true,
@@ -59,11 +59,11 @@ const SponsorLogin: React.FC = () => {
             <NavBar/>
             <Box maxWidth="400px" m={8}>
                 <Heading>
-                    Login as Sponsor
+                    Iniciar Sesión como Patrocinador
                 </Heading>
                 <VStack spacing={4}>
                     <FormControl id="sponsorId" isRequired>
-                        <FormLabel>Sponsor ID</FormLabel>
+                        <FormLabel>ID del Patrocinador</FormLabel>
                         <Input
                             type="text"
                             value={sponsorId}
@@ -71,7 +71,7 @@ const SponsorLogin: React.FC = () => {
                         />
                     </FormControl>
                     <FormControl id="sponsorKey" isRequired>
-                        <FormLabel>Sponsor Key</FormLabel>
+                        <FormLabel>Clave del Patrocinador</FormLabel>
                         <Input
                             type="password"
                             value={sponsorKey}
@@ -84,7 +84,7 @@ const SponsorLogin: React.FC = () => {
                         onClick={handleLogin}
                         isLoading={isLoading}
                     >
-                        Login
+                        Iniciar Sesión
                     </Button>
                 </VStack>
             </Box>
