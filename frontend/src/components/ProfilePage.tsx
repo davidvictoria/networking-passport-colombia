@@ -37,7 +37,6 @@ const ProfilePage: React.FC = () => {
     const [showInactiveModal, setShowInactiveModal] = useState(false);
     const [isInitialized, setIsInitialized] = useState<boolean | null>(null);
     const [activationMethod, setActivationMethod] = useState<'both' | 'email'>('both');
-    const [activationValue, setActivationValue] = useState('');
 
     const toast = useToast();
     const bgColor = useColorModeValue('gray.50', 'gray.800');

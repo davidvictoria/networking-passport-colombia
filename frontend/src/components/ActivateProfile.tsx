@@ -94,14 +94,6 @@ const areaOfInterestOptions = [
     "Bases de datos"
 ];
 
-const profiles = [
-    "Estudiante",
-    "Ingeniero/a con 3 o menos años de experiencia",
-    "Ingeniero/a con más de 3 años de experiencia",
-    "Buscando reconvertir mi carrera",
-    "Otro perfil"
-];
-
 const genderOptions = ["Hombre", "Mujer", "Otro"];
 const ageRangeOptions = ["18-24", "25-34", "35-44", "45-54", "55+"];
 
