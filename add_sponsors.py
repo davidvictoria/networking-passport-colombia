@@ -10,62 +10,26 @@ import json
 from botocore.exceptions import ClientError
 
 # Configuración
-TABLE_NAME = "networking-passport-colombia-db-table"  # Ajusta según tu stack name
+TABLE_NAME = "networking-passport-argentina-db-table"  # Ajusta según tu stack name
 REGION = "us-east-1"
 
 # Lista de sponsors a agregar
 SPONSORS = [
     {
+        "sponsor_id": "1",
+        "sponsor_name": "AWS Community Builders",
+        "key": str(uuid.uuid4()),
+        "required": True
+    },
+    {
         "sponsor_id": "2",
-        "sponsor_name": "CloudCamp",
+        "sponsor_name": "AWS User Groups",
         "key": str(uuid.uuid4()),
         "required": True
     },
     {
-        "sponsor_id": "3", 
-        "sponsor_name": "Clouxter",
-        "key": str(uuid.uuid4()),
-        "required": True
-    },
-    {
-        "sponsor_id": "4",
-        "sponsor_name": "Encora",
-        "key": str(uuid.uuid4()),
-        "required": True
-    },
-    {
-        "sponsor_id": "5",
-        "sponsor_name": "Nequi",
-        "key": str(uuid.uuid4()),
-        "required": True
-    },
-    {
-        "sponsor_id": "6",
-        "sponsor_name": "Endava",
-        "key": str(uuid.uuid4()),
-        "required": True
-    },
-    {
-        "sponsor_id": "7",
-        "sponsor_name": "I CLOUD SEVEN SAS",
-        "key": str(uuid.uuid4()),
-        "required": True
-    },
-    {
-        "sponsor_id": "8",
-        "sponsor_name": "EPAM Systems",
-        "key": str(uuid.uuid4()),
-        "required": True
-    },
-    {
-        "sponsor_id": "9",
-        "sponsor_name": "AWS Community Day Colombia",
-        "key": str(uuid.uuid4()),
-        "required": True
-    },
-    {
-        "sponsor_id": "10",
-        "sponsor_name": "Universidad Nacional de Colombia",
+        "sponsor_id": "3",
+        "sponsor_name": "AWS Heroes",
         "key": str(uuid.uuid4()),
         "required": True
     }

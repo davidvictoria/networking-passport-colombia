@@ -3,7 +3,7 @@
 version = 0.1
 
 [default.global.parameters]
-stack_name = "networking-passport-colombia"
+stack_name = "networking-passport-argentina"
 
 [default.build.parameters]
 cached = true
@@ -16,7 +16,7 @@ lint = true
 capabilities = "CAPABILITY_IAM"
 confirm_changeset = true
 resolve_s3 = true
-s3_prefix = "networking-passport-colombia"
+s3_prefix = "networking-passport-argentina"
 region = "us-east-1"
 disable_rollback = true
 parameter_overrides = "ShortIdGSIName=\"ShortIdGSI\" DateLSIName=\"DateLSI\""

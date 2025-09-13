@@ -14,15 +14,9 @@ interface PassportProps {
 
 // Mapeo de IDs a nombres de sponsors
 const sponsorNames: Record<string, string> = {
-  '2': 'EPAM Systems',
-  '3': 'CloudCamp',
-  '4': 'Clouxter',
-  '5': 'Encora',
-  '6': 'Nequi',
-  '7': 'Endava',
-  '8': 'I CLOUD SEVEN SAS',
-  '9': 'AWS Community Day Colombia',
-  '10': 'Universidad Nacional de Colombia',
+  '1': 'AWS Community Builders',
+  '2': 'AWS User Groups',
+  '3': 'AWS Heroes',
 };
 
 const Passport: React.FC<PassportProps> = ({ shortId }) => {
@@ -31,7 +25,7 @@ const Passport: React.FC<PassportProps> = ({ shortId }) => {
   const fetchedRef = useRef(false);
 
   // Lista de todos los sponsors disponibles
-  const allSponsors = ['10', '2', '3', '4', '5', '6', '7', '8', '9'];
+  const allSponsors = ['1', '2', '3'];
 
   useEffect(() => {
     if (fetchedRef.current) return;
@@ -67,9 +61,9 @@ const Passport: React.FC<PassportProps> = ({ shortId }) => {
         Pasaporte Digital
       </Text>
       <Text fontSize="sm" fontStyle="italic" mb={3} mt={0}>
-        ¡Llevas {passportData?.stamped_sponsors.length || 0} de 9 sellos!
+        ¡Llevas {passportData?.stamped_sponsors.length || 0} de 3 sellos!
       </Text>
-      <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+      <Grid templateColumns="repeat(3, 1fr)" gap={4}>
         {allSponsors.map((sponsorId) => (
           <Box key={sponsorId} textAlign="center">
             <Stamp
